@@ -54,7 +54,8 @@ def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
 def __main__():
     git_pre(REPO)
 
-    password = get_stdout(run(["sops", "-d", "./secrets.yaml"], stdout=PIPE))
+    password_yaml = get_stdout(run(["sops", "-d", "./secrets.yaml"], stdout=PIPE))
+    password = safe_load(password_yaml)["github"]["pac"]
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
     switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
