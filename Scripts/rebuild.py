@@ -1,6 +1,8 @@
 from subprocess import run, PIPE, DEVNULL, CompletedProcess
 from pathlib import Path
 from sys import argv
+from git import Repo, RemoteProgress
+from tqdm import tqdm
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
@@ -8,6 +10,16 @@ SCRIPT_DIR=PWD/'scripts'
 AUTOCOMMIT_MESSAGE="Auto-commit update"
 GIT_PRE="git pull; git add -A"
 GIT_POST=f"git commit -m {AUTOCOMMIT_MESSAGE}; git push;"
+REPO=Repo(str(PWD))
+
+class Progress(RemoteProgress):
+    def __init__(self):
+        super().__init__()
+        self.pbar = tqdm()
+    def update(self, op_code, cur_count, max_count=None, message = ''):
+        self.pbar.total = max_count
+        self.pbar.n = cur_count
+        self.pbar.refresh()
 
 def split_args(cmds: str) -> list[str]:
     return cmds.split(" ")
@@ -21,25 +33,33 @@ def get_stderr(proc: CompletedProcess) -> str:
 def get_output(proc: CompletedProcess) -> str:
     return get_stdout(proc) + get_stderr(proc)
 
+def git_pre(repo: Repo):
+    repo.remote().pull(progress=Progress())
+    repo.git.add('-A')
+
+def git_post(repo: Repo):
+    repo.index.commit(AUTOCOMMIT_MESSAGE)
+    repo.remote().push(progress=Progress())
+
 def rsync_func(dir1: str, dir2: str) -> None:
     cmds = f"rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
-    run(split_args(cmds), stdout=DEVNULL, shell=True)
+    run(split_args(cmds), stdout=DEVNULL)
 
 def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
     cmds = f"nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
-    return run(split_args(cmds), stdout=PIPE, stderr=PIPE, shell=True)
+    return run(split_args(cmds), stdout=PIPE, stderr=PIPE)
 
 def __main__():
-    gitpre_output = get_output(run(GIT_PRE, stdout=PIPE, stderr=PIPE, shell=True))
+    git_pre(REPO)
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
-    direction = input(f"To OR From {REBUILD_DIR}?\n(*). To {REBUILD_DIR}\n(1). From {REBUILD_DIR}\n")
+    direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
     switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
 
     if direction == "1":
-        rsync_func(REBUILD_DIR, PWD)
+        rsync_func(str(REBUILD_DIR), str(PWD))
     else:
-        rsync_func(PWD, REBUILD_DIR)
+        rsync_func(str(PWD), str(REBUILD_DIR))
     
     rebuild_output = ""
     if switch_bool != "n":
@@ -53,10 +73,8 @@ def __main__():
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
-    gitpost_output = get_output(run(GIT_POST, stdout=PIPE, stderr=PIPE, shell=True))
+    git_post(REPO)
 
-    print("=== GIT PRE ===", gitpre_output, sep="\n")
     print("=== REBUILD ===", rebuild_output, sep="\n")
-    print("=== GIT POST ===", gitpost_output, sep="\n")
     
 __main__()
