@@ -1,6 +1,7 @@
 keys:
   - &jason_whitman age184sj3dnv3dy6us6zezjh6qu0ngh7qa970swfn9cknjwwj88gyalq38xqaw
   - &server_pc age1jmakxk0sr6q9nq2qx8zfltz2gcjmtn3wkavna46ast34w3xn8vuqzerpas
+  - &server_laptop age17raazee9gv9v9f0cr4c5hv53utr7a9c4wfw6s3uge0yuauhncftsgwgfu4
 creation_rules:
   - path_regex: secrets+\.(yaml|json|env|ini)$
     key_groups:
