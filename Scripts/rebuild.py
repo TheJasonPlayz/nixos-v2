@@ -1,7 +1,7 @@
 from subprocess import run, PIPE, DEVNULL, CompletedProcess
 from pathlib import Path
 from sys import argv
-from git import Repo, RemoteProgress
+from git import Repo, RemoteProgress, Actor
 from tqdm import tqdm
 
 REBUILD_DIR=Path('/etc/nixos/')
@@ -11,6 +11,7 @@ AUTOCOMMIT_MESSAGE="Auto-commit update"
 GIT_PRE="git pull; git add -A"
 GIT_POST=f"git commit -m {AUTOCOMMIT_MESSAGE}; git push;"
 REPO=Repo(str(PWD))
+AUTHOR=Actor("Jason D Whitman", "jasondwhitman1124@gmail.com")
 
 class Progress(RemoteProgress):
     def __init__(self):
@@ -38,7 +39,7 @@ def git_pre(repo: Repo):
     repo.git.add('-A')
 
 def git_post(repo: Repo):
-    repo.index.commit(AUTOCOMMIT_MESSAGE)
+    repo.index.commit(f"-m {AUTOCOMMIT_MESSAGE}", author=AUTHOR)
     repo.remote().push(progress=Progress())
 
 def rsync_func(dir1: str, dir2: str) -> None:
