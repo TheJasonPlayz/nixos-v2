@@ -3,6 +3,7 @@ from pathlib import Path
 from sys import argv
 from git import Repo, RemoteProgress, Actor
 from tqdm import tqdm
+from yaml import safe_load
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
@@ -53,6 +54,7 @@ def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
 def __main__():
     git_pre(REPO)
 
+    password = get_stdout(run(["sops", "./secrets.yaml"], stdout=PIPE))
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
     switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
@@ -77,5 +79,5 @@ def __main__():
     git_post(REPO)
 
     print("=== REBUILD ===", rebuild_output, sep="\n")
-    
+    print(password)
 __main__()
