@@ -45,11 +45,11 @@ def git_post(repo: Repo):
     repo.remote().push(progress=Progress())
 
 def rsync_func(dir1: str, dir2: str) -> None:
-    cmds = f"sudo rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
+    cmds = f"echo $SUDO | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
     run(split_args(cmds), stdout=DEVNULL)
 
 def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
-    cmds = f"sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
+    cmds = f"echo $SUDO | sudo -S sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
     return run(split_args(cmds), stdout=PIPE, stderr=PIPE)
 
 def __main__():
