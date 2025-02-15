@@ -14,6 +14,7 @@
     pkgs = import nixpkgs { inherit system; };
     nixosSystem = nixpkgs.lib.nixosSystem;
     sharedModules = [ 
+      foundryvtt.nixosModules.foundryvtt
       ./config/shared/nixos.nix 
       ./config/shared/nixpkgs.nix
       ./config/shared/i18n.nix
