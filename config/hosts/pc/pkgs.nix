@@ -1,6 +1,4 @@
-{ hasGui, ... }:
-
-with hasGui; [
+[
     ../../pkgs/base.nix
     ../../pkgs/cloud.nix
     ../../pkgs/dev.nix

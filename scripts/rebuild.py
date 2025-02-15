@@ -48,16 +48,7 @@ def __main__():
     else:
         rsync_func(str(PWD) + "/", str(REBUILD_DIR))
     
-    if switch_bool != "n":
-        match hostname:
-            case "jasonw-pc":
-                rebuild_func(argv[1:])
-            case "jasonw-laptop":
-                rebuild_func(argv[1:])
-            case "jasonw-server1":
-                rebuild_func(argv[1:])
-            case _:
-                raise TypeError("HOSTNAME NOT FOUND")
+    rebuild_func(argv[1:])
 
     git_password = get_sops()["github"]["pac"]
     run(split_args(f"git config credential.https://github.com.username {GIT_USERNAME}"))
