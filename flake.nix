@@ -28,8 +28,8 @@
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
     hm-config = host: user: sops-nix: { sops-nix, ... }: {
       home-manager = {
-        users.${user} = import ./home/${user}/${host}.nix;
-        extraSpecialArgs = { inherit sops-nix; };
+        users.${user} = import ./home/${user}/${host}.nix { inherit sops-nix; };
+        extraSpecialArgs = { };
       };
     };
     mkNixos = hostname: hasGui: 
