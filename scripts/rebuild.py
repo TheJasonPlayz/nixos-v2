@@ -24,11 +24,11 @@ def git_post():
     return GIT_FUNC(GIT_POST)
 
 
-def rsync_func(dir1: str, dir2: str) -> None:
+def rsync_func(dir1: str, dir2: str):
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
     return run_with_realtime(cmds, True)
 
-def rebuild_func(other_flags: list[str]) -> CompletedProcess:
+def rebuild_func(other_flags: list[str]):
     cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
     return run_with_realtime(cmds, True)
 
