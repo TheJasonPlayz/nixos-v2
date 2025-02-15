@@ -13,7 +13,11 @@ stdenv.mkDerivation {
 
 
     installPhase = ''
-      cp $id_ed25519 $HOME/.ssh/id_ed25519
+      mkdir $out
+      cp $id_ed25519 $out/id_ed25519
+      if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
+        ln -s "$HOME/.ssh/id_ed25519" "$out/id_ed25519"
+      fi
     '';
 
     dontUnpack = true;
