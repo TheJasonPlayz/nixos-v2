@@ -59,7 +59,6 @@
           age
         ];
         shellHook = ''
-          ./scripts/rebuild.py
           codium .
         '';
     };

@@ -6,7 +6,7 @@ from sys import argv
 from os import environ
 from utils import *
 from ssh_privkey import __main__ as privkey
-# from latest_xmage import __main__ as xmage
+from latest_xmage import __main__ as xmage
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
@@ -26,14 +26,14 @@ def git_post():
 
 def rsync_func(dir1: str, dir2: str) -> None:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
-    return get_stderr(run(split_args(cmds), stdout=DEVNULL, stderr=PIPE, shell=True))
+    return get_stderr(run(cmds, stdout=DEVNULL, stderr=PIPE, shell=True))
 
 def rebuild_func(other_flags: list[str]) -> CompletedProcess:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
-    return run(split_args(cmds), stdout=PIPE, stderr=PIPE, shell=True)
+    return get_output(run(cmds, stdout=PIPE, stderr=PIPE, shell=True))
 
 def __main__():
-    # xmage()
+    xmage()
     privkey()
 
     git_password = get_sops()["github"]["pac"]
@@ -46,26 +46,28 @@ def __main__():
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
     switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
 
+    rsync_output = ""
     if direction == "1":
-        rsync_func(str(REBUILD_DIR), str(PWD))
+        rsync_output = rsync_func(str(REBUILD_DIR), str(PWD))
     else:
-        rsync_func(str(PWD), str(REBUILD_DIR))
+        rsync_output = rsync_func(str(PWD), str(REBUILD_DIR))
     
     rebuild_output = ""
     if switch_bool != "n":
         match hostname:
             case "jasonw-pc":
-                rebuild_output = get_output(rebuild_func(argv))
+                rebuild_output = rebuild_func(argv)
             case "jasonw-laptop":
-                rebuild_output = get_output(rebuild_func(argv))
+                rebuild_output = rebuild_func(argv)
             case "jasonw-server1":
-                rebuild_output = get_output(rebuild_func(argv))
+                rebuild_output = rebuild_func(argv)
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
     gitpost_output = git_post()
 
     print("=== GIT PRE ===", gitpre_output + "\n", sep="\n")
+    print("=== RSYNC ===", rsync_output + "\n", sep="\n")
     print("=== REBUILD ===", rebuild_output + "\n", sep="\n")
     print("=== GIT POST ===", gitpost_output + "\n", sep="\n")
     
