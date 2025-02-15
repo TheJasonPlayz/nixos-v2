@@ -69,6 +69,5 @@
       '';
     };
     formatter = pkgs.nixfmt-rfc-style;
-    packages.${system}.default = ( pkgs.callPackage ./hosts/common/pkgs/custom/ssh_privkey.nix { } );
   };
 }
