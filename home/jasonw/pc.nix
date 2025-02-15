@@ -2,6 +2,6 @@
 
 {
   imports = [
-    ./common { inherit sops-nix; }
+    ./common
   ];
 }

@@ -30,6 +30,7 @@
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { inherit sops-nix; };
         extraSpecialArgs = { };
+        sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };
     mkNixos = hostname: hasGui: 
