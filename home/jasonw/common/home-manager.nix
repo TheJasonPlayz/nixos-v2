@@ -3,8 +3,8 @@
 {
   programs.home-manager.enable = true;
   home = {
-    username = "jasonw";
-    homeDirectory = "/home/jasonw";
+    username = username;
+    homeDirectory = "/home/${username}";
     stateVersion = "24.11";
     file = {
       id_ed25519 = {

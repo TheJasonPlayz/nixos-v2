@@ -1,7 +1,7 @@
-{ ... }:
+{ sops-nix, ... }:
 
 {
   imports = [
-    ./common
+    ./common { inherit sops-nix; }
   ];
 }
