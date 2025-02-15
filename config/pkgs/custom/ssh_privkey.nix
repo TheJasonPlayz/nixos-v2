@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
     installPhase = ''
       mkdir $out
-      cp $id_ed25519 $out/
+      cp "$id_ed25519" "$out/id_ed25519"
       if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
         ln -s "$HOME/.ssh/id_ed25519" "$out/id_ed25519"
       fi
