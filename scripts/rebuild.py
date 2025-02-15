@@ -53,7 +53,6 @@ def __main__():
     
     rebuild_output = ""
     if switch_bool != "n":
-        print(hostname)
         match hostname:
             case "jasonw-pc":
                 rebuild_output = get_output(rebuild_func(argv))
