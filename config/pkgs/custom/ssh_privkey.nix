@@ -1,4 +1,4 @@
-{ mkDerivation, ... }:
+{ pkgs, mkDerivation, ... }:
 
 mkDerivation {
     name = "ssh_privkey";
