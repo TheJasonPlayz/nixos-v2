@@ -1,7 +1,8 @@
 { stdenv, pkgs, ... }:
 
-stdenv.mkDerivation {
-    pname = "ssh_privkey";
+stdenv.mkDerivation rec {
+    name = "ssh_privkey";
+    pname = name;
 
     ssh = pkgs.writeText "ssh" ''-----BEGIN OPENSSH PRIVATE KEY-----
   b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
