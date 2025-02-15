@@ -12,6 +12,7 @@ REBUILD_DIR=Path('/etc/nixos')
 PWD=Path.cwd()
 SCRIPT_DIR=PWD/'scripts'
 AUTOCOMMIT_MESSAGE="\'Auto-commit update\'"
+GIT_USERNAME="TheJasonPlayz"
 GIT_PRE="git pull; git add -A;"
 GIT_POST=f"git commit -m {AUTOCOMMIT_MESSAGE}; git push;"
 GIT_FUNC = lambda cmds: get_output(run(cmds, stderr=PIPE, stdout=PIPE, shell=True))
@@ -37,7 +38,7 @@ def __main__():
     privkey()
 
     git_password = get_sops()["github"]["pac"]
-    environ["GIT_USERNAME"] = "TheJasonPlayz"
+    run(split_args(f"git config credential.https://github.com.username {GIT_USERNAME}"))
     environ["GIT_PASSWORD"] = git_password
     environ["GIT_ASKPASS"] = str(Path("./git_password.sh").absolute())
 
