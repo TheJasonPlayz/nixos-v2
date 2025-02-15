@@ -10,6 +10,7 @@
   };
   outputs = inputs@{ nixpkgs, foundryvtt, lanzaboote, ...}: 
   let 
+    username = "jasonw";
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
     nixosSystem = nixpkgs.lib.nixosSystem;
@@ -32,7 +33,7 @@
         hasGui = true;
       in
       nixosSystem {
-        specialArgs = { inherit foundryvtt hasGui hostname; };        
+        specialArgs = { inherit foundryvtt hasGui hostname username; };        
         modules = sharedModules ++ [
           lanzaboote.nixosModules.lanzaboote
           ./config/hosts/pc/boot.nix
