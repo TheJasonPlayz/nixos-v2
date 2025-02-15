@@ -6,7 +6,7 @@ from sys import argv
 from os import environ
 from utils import *
 from ssh_privkey import __main__ as privkey
-from latest_xmage import __main__ as xmage
+# from latest_xmage import __main__ as xmage
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
@@ -33,7 +33,7 @@ def rebuild_func(other_flags: list[str]) -> CompletedProcess:
     return run(split_args(cmds), stdout=PIPE, stderr=PIPE, shell=True)
 
 def __main__():
-    xmage()
+    # xmage()
     privkey()
 
     git_password = get_sops()["github"]["pac"]
