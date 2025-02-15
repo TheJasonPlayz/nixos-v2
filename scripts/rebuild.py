@@ -28,8 +28,8 @@ def rsync_func(dir1: str, dir2: str) -> None:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
     return get_stderr(run(split_args(cmds), stdout=DEVNULL, stderr=PIPE, shell=True))
 
-def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
-    cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
+def rebuild_func(other_flags: list[str]) -> CompletedProcess:
+    cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
     return run(split_args(cmds), stdout=PIPE, stderr=PIPE, shell=True)
 
 def __main__():
@@ -56,11 +56,11 @@ def __main__():
         print(hostname)
         match hostname:
             case "jasonw-pc":
-                rebuild_output = get_output(rebuild_func("pc", argv))
+                rebuild_output = get_output(rebuild_func(argv))
             case "jasonw-laptop":
-                rebuild_output = get_output(rebuild_func("laptop", argv))
+                rebuild_output = get_output(rebuild_func(argv))
             case "jasonw-server1":
-                rebuild_output = get_output(rebuild_func("server1", argv))
+                rebuild_output = get_output(rebuild_func(argv))
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
