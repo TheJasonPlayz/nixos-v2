@@ -38,7 +38,8 @@
     };
     mkNixos = hostname: hasGui: 
     let
-      inherit (pkgs.lib) mkIf nixosSystem;
+      inherit (pkgs.lib) mkIf;
+      inherit (nixpkgs.lib) nixosSystem;
       host = host_func hostname 6;
     in
     nixosSystem {
