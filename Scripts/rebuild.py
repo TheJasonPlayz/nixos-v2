@@ -26,7 +26,7 @@ def git_post(repo: Repo):
 
 def rsync_func(dir1: str, dir2: str) -> None:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
-    return run(split_args(cmds), stdout=DEVNULL, shell=True)
+    return get_stderr(run(split_args(cmds), stdout=DEVNULL, stderr=PIPE, shell=True))
 
 def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
