@@ -32,7 +32,7 @@
     in {
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { username=user; };
-        extraSpecialArgs = { username=user; inherit sops; };
+        extraSpecialArgs = { username=user; inherit sops builtins; };
         sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };
