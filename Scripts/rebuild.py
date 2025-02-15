@@ -3,26 +3,24 @@
 from subprocess import run, PIPE, DEVNULL
 from pathlib import Path
 from sys import argv
-from git import Repo, Actor
 from os import environ
 from utils import *
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
 SCRIPT_DIR=PWD/'scripts'
-AUTOCOMMIT_MESSAGE="Auto-commit update"
-REPO=Repo(str(PWD))
-AUTHOR=Actor("Jason D Whitman", "jasondwhitman1124@gmail.com")
+AUTOCOMMIT_MESSAGE="\'Auto-commit update\'"
+GIT_PRE="git pull; git add -A;"
+GIT_POST=f"git commit -m {AUTOCOMMIT_MESSAGE}; git push;"
+GIT_FUNC = lambda cmds: get_output(run(cmds, stderr=PIPE, stdout=PIPE, shell=True))
 SUDO_PASSWORD=get_sops()["sudo"]
 
-def git_pre(repo: Repo):
-    repo.remote().pull(progress=GitProgress())
-    output = get_output(run(split_args("git add -A"), stderr=PIPE, stdout=PIPE))
-    return output
+def git_pre():
+    return GIT_FUNC(GIT_PRE)
 
-def git_post(repo: Repo):
-    repo.git.commit(f"-m {AUTOCOMMIT_MESSAGE}", author=AUTHOR)
-    repo.remote().push(progress=GitProgress())
+def git_post():
+    return GIT_FUNC(GIT_POST)
+
 
 def rsync_func(dir1: str, dir2: str) -> None:
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
@@ -37,7 +35,7 @@ def __main__():
     environ["GIT_USERNAME"] = "TheJasonPlayz"
     environ["GIT_PASSWORD"] = git_password
 
-    gitpre_output = git_pre(REPO)
+    gitpre_output = git_pre()
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
@@ -60,9 +58,10 @@ def __main__():
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
-    git_post(REPO)
+    gitpost_output = git_post()
 
     print("=== GIT PRE ===", gitpre_output)
     print("=== REBUILD ===", rebuild_output)
+    print("=== GIT POST ===", gitpost_output)
     
 __main__()
