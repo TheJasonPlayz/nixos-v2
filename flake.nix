@@ -44,12 +44,12 @@
     in
     nixosSystem {
       specialArgs = { inherit foundryvtt hasGui hostname username; };
-      modules = sharedModules ++ [(mkIf (hostname == "jasonw-pc") lanzaboote.nixosModules.lanzaboote)] ++ [
+      modules = sharedModules ++ [
         ./hosts/${host}/boot.nix
         ./hosts/${host}/hardware.nix
         ./hosts/${host}/configuration.nix
         (hm-config host username)
-      ] ++ ( import ./hosts/${host}/pkgs.nix);
+      ] ++ ( import ./hosts/${host}/pkgs.nix) ++ (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
     };
   in
   {
