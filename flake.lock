@@ -1,6 +1,40 @@
 {
   "nodes": {
+    "foundryvtt": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1737076827,
+        "narHash": "sha256-vM9C1gFiQGa3nTYqmTBI8MoiUfprkQdepUBbxV7ECMQ=",
+        "owner": "reckenrode",
+        "repo": "nix-foundryvtt",
+        "rev": "0a72a4bf64224c6584fd1b9e9f0012dd09af979a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "reckenrode",
+        "repo": "nix-foundryvtt",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1736916166,
+        "narHash": "sha256-puPDoVKxkuNmYIGMpMQiK8bEjaACcCksolsG36gdaNQ=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e24b4c09e963677b1beea49d411cd315a024ad3a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1739214665,
         "narHash": "sha256-26L8VAu3/1YRxS8MHgBOyOM8xALdo6N0I04PgorE7UM=",
@@ -18,7 +52,8 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "foundryvtt": "foundryvtt",
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },

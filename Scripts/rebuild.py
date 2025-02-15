@@ -1,64 +1,43 @@
-from subprocess import run, PIPE, DEVNULL, CompletedProcess
+#!/usr/bin/env python
+
+from subprocess import run, PIPE, DEVNULL
 from pathlib import Path
 from sys import argv
-from git import Repo, RemoteProgress, Actor
-from tqdm import tqdm
-from yaml import safe_load
+from git import Repo, Actor
 from os import environ
+from utils import *
 
 REBUILD_DIR=Path('/etc/nixos/')
 PWD=Path.cwd()
 SCRIPT_DIR=PWD/'scripts'
 AUTOCOMMIT_MESSAGE="Auto-commit update"
-GIT_PRE="git pull; git add -A"
-GIT_POST=f"git commit -m {AUTOCOMMIT_MESSAGE}; git push;"
 REPO=Repo(str(PWD))
 AUTHOR=Actor("Jason D Whitman", "jasondwhitman1124@gmail.com")
-
-class Progress(RemoteProgress):
-    def __init__(self):
-        super().__init__()
-        self.pbar = tqdm()
-    def update(self, op_code, cur_count, max_count=None, message = ''):
-        self.pbar.total = max_count
-        self.pbar.n = cur_count
-        self.pbar.refresh()
-
-def split_args(cmds: str) -> list[str]:
-    return cmds.split(" ")
-
-def get_stdout(proc: CompletedProcess) -> str:
-    return proc.stdout.strip().decode("utf-8")
-
-def get_stderr(proc: CompletedProcess) -> str:
-    return proc.stderr.strip().decode("utf-8")
-
-def get_output(proc: CompletedProcess) -> str:
-    return get_stdout(proc) + get_stderr(proc)
+SUDO_PASSWORD=get_sops()["sudo"]
 
 def git_pre(repo: Repo):
-    repo.remote().pull(progress=Progress())
-    repo.git.add('-A')
+    repo.remote().pull(progress=GitProgress())
+    output = get_output(run(split_args("git add -A"), stderr=PIPE, stdout=PIPE))
+    return output
 
 def git_post(repo: Repo):
     repo.git.commit(f"-m {AUTOCOMMIT_MESSAGE}", author=AUTHOR)
-    repo.remote().push(progress=Progress())
+    repo.remote().push(progress=GitProgress())
 
 def rsync_func(dir1: str, dir2: str) -> None:
-    cmds = f"echo $SUDO | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
+    cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
     run(split_args(cmds), stdout=DEVNULL)
 
 def rebuild_func(hostname: str, other_flags: list[str]) -> CompletedProcess:
-    cmds = f"echo $SUDO | sudo -S sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
+    cmds = f"echo ${SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake {" ".join(other_flags)} /etc/nixos#{hostname}"
     return run(split_args(cmds), stdout=PIPE, stderr=PIPE)
 
 def __main__():
-    password_yaml = get_stdout(run(["sops", "-d", "./secrets.yaml"], stdout=PIPE))
-    password = safe_load(password_yaml)["github"]["pac"]
+    git_password = get_sops()["github"]["pac"]
     environ["GIT_USERNAME"] = "TheJasonPlayz"
-    environ["GIT_PASSWORD"] = password
+    environ["GIT_PASSWORD"] = git_password
 
-    git_pre(REPO)
+    gitpre_output = git_pre(REPO)
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
@@ -83,5 +62,7 @@ def __main__():
 
     git_post(REPO)
 
-    print("=== REBUILD ===", rebuild_output, sep="\n")
+    print("=== GIT PRE ===", gitpre_output)
+    print("=== REBUILD ===", rebuild_output)
+    
 __main__()
