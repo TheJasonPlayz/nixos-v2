@@ -4,6 +4,7 @@ lib.mkMerge [
   {
     programs = {
       direnv.enable = true;
+      ssh.startAgent = true;
     };
   }
 
