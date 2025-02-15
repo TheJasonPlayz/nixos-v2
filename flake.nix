@@ -7,7 +7,7 @@
   let 
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-    nixosSystem = pkgs.lib.nixosSystem;
+    nixosSystem = nixpkgs.lib.nixosSystem;
     sharedModules = [ 
       ./config/shared/nixos.nix 
       ./config/shared/nixpkgs.nix
