@@ -4,10 +4,10 @@ from yaml import safe_load
 
 def run_with_realtime(cmds: str, shell: bool):
     process = Popen(
-        (split_args(cmds) if shell else cmds),
+        (split_args(cmds) if not shell else cmds),
         stdout=PIPE,
         stderr=PIPE,
-        shell=(not shell)
+        shell=shell
     )
     while True:
         line = process.stdout.readline()
