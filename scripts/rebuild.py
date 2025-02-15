@@ -5,7 +5,6 @@ from pathlib import Path
 from sys import argv
 from os import environ
 from utils import *
-from ssh_privkey import __main__ as privkey
 from latest_xmage import __main__ as xmage
 
 REBUILD_DIR=Path('/etc/nixos')
@@ -20,7 +19,6 @@ SUDO_PASSWORD=get_sops()["sudo"]
 
 def __main__():
     xmage()
-    privkey()
 
     print("=== GIT PRE ===\n")
     run_with_realtime(GIT_PRE)

@@ -1,8 +1,7 @@
-{ pkgs, username, ... }:
+{ pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
-    # ( pkgs.callPackage ./custom/ssh_privkey.nix { inherit username; })
     rsync
     wget
     unzip

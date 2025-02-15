@@ -1,4 +1,4 @@
-{ username, ... }:
+{ config, username, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -6,5 +6,12 @@
     username = "jasonw";
     homeDirectory = "/home/jasonw";
     stateVersion = "24.11";
+    file = {
+      "id_ed25519" = {
+        force = true;
+        source = config.sops.secrets."ssh/priv_key".path;
+        path = ".ssh/id_ed25519"
+      };
+    };
   };
 }
