@@ -11,7 +11,6 @@ def run_with_realtime(cmds: str):
     while True:
         stdout_line = process.stdout.readline().decode("utf-8")
         stderr_line = process.stderr.readline().decode("utf-8")
-        print(process.poll())
         if not stderr_line and not stdout_line and process.poll() is not None:
             break
         print(stdout_line, stderr_line, end='', sep="\n")
