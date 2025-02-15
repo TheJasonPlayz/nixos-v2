@@ -1,5 +1,4 @@
 from subprocess import CompletedProcess, PIPE, run, Popen
-from tqdm import tqdm
 from yaml import safe_load
 
 def run_with_realtime(cmds: str, shell: bool):

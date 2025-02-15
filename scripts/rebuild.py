@@ -29,7 +29,7 @@ def rsync_func(dir1: str, dir2: str):
     run_with_realtime(cmds, True)
 
 def rebuild_func(other_flags: list[str]):
-    cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
+    cmds = f"echo {SUDO_PASSWORD} | sudo -S nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
     run_with_realtime(cmds, True)
 
 def __main__():
