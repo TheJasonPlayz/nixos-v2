@@ -26,8 +26,7 @@
         hasGui = true;
       in
       nixosSystem {
-        specialArgs = [ foundryvtt hasGui hostname ];
-        modules = sharedModules ++ [
+        specialArgs = { inherit foundryvtt hasGui hostname; };        modules = sharedModules ++ [
           ./config/hosts/pc/boot.nix
           ./config/hosts/pc/hardware.nix
           ./config/hosts/pc/configuration.nix
