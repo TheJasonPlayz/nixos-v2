@@ -7,8 +7,8 @@ lib.mkMerge [
     };
   }
 
-  lib.mkIf hasGui {
-    programs = {
+  {
+    programs = lib.mkIf hasGui {
       firefox.enable = true;
     };
   }
