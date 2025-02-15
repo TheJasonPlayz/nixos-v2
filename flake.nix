@@ -26,7 +26,7 @@
       sops-nix.nixosModules.sops
     ];
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
-    hm-config = host: user: sops-nix: { sops-nix, ... }: {
+    hm-config = host: user: sops-nix: { ... }: {
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { inherit sops-nix; };
         extraSpecialArgs = { };
