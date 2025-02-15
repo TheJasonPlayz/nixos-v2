@@ -19,15 +19,6 @@
     sharedModules = [ 
       home-manager.nixosModules.home-manager
       foundryvtt.nixosModules.foundryvtt
-      ./hosts/common/nixos.nix 
-      ./hosts/common/nixpkgs.nix
-      ./hosts/common/i18n.nix
-      ./hosts/common/security.nix
-      ./hosts/common/networking.nix
-      ./hosts/common/users.nix
-      ./hosts/common/services.nix
-      ./hosts/common/time.nix
-      ./hosts/common/programs.nix
     ];
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
     hm-config = host: user: { ... }: {
@@ -45,11 +36,10 @@
     nixosSystem {
       specialArgs = { inherit foundryvtt hasGui hostname username; };
       modules = sharedModules ++ [
-        ./hosts/${host}/boot.nix
-        ./hosts/${host}/hardware.nix
-        ./hosts/${host}/configuration.nix
+        ./hosts/common
+        ./hosts/${host}
         (hm-config host username)
-      ] ++ ( import ./hosts/${host}/pkgs.nix) ++ (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
+      ] (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
     };
   in
   {
