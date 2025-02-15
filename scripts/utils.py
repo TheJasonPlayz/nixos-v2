@@ -12,7 +12,7 @@ def get_stderr(proc: CompletedProcess) -> str:
     return proc.stderr.strip().decode("utf-8")
 
 def get_output(proc: CompletedProcess) -> str:
-    return get_stdout(proc) + get_stderr(proc)
+    return get_stdout(proc) + "\n" + get_stderr(proc)
 
 def get_sops():
     sops_yaml = get_stdout(run(["sops", "-d", "./secrets.yaml"], stdout=PIPE))
