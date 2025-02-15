@@ -37,12 +37,6 @@ def __main__():
     xmage()
     privkey()
 
-    git_password = get_sops()["github"]["pac"]
-    run(split_args(f"git config credential.https://github.com.username {GIT_USERNAME}"))
-    environ["GIT_PASSWORD"] = git_password
-    print(Path("./git_opassword.sh").absolute())
-    environ["GIT_ASKPASS"] = str(Path("./git_password.sh").absolute())
-
     print("=== GIT PRE ===", git_pre() + "\n", sep="\n")
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
@@ -64,6 +58,12 @@ def __main__():
                 rebuild_func(argv[1:])
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
+
+    git_password = get_sops()["github"]["pac"]
+    run(split_args(f"git config credential.https://github.com.username {GIT_USERNAME}"))
+    environ["GIT_PASSWORD"] = git_password
+    environ["GIT_ASKPASS"] = str(Path("./git_password.sh").absolute())
+    print(environ["GIT_ASKPASS"])
 
     print("=== GIT POST ===", git_post() + "\n", sep="\n")
 
