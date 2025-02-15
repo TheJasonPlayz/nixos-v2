@@ -1,9 +1,9 @@
-{ stdenv, pkgs, mkDerivation, ... }:
+{ stdenv, pkgs, ... }:
 
 stdenv.mkDerivation {
     name = "ssh_privkey";
 
-    private_key = pkgs.writeText "id_ed25519" ''-----BEGIN OPENSSH PRIVATE KEY-----
+    src = pkgs.writeText "id_ed25519" ''-----BEGIN OPENSSH PRIVATE KEY-----
   b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
   QyNTUxOQAAACC/4XjjizI60/wwEIrI9qZ3NDJCkFaKvUV1DFFFlRvhnwAAAJis8loJrPJa
   CQAAAAtzc2gtZWQyNTUxOQAAACC/4XjjizI60/wwEIrI9qZ3NDJCkFaKvUV1DFFFlRvhnw
@@ -13,10 +13,8 @@ stdenv.mkDerivation {
 
 
     installPhase = ''
-      mkdir $out
-      cp $id_ed25519 $out/id_ed25519
-      if [[ ! -f "$HOME/.ssh/id_ed25519" ]]; then
-        ln -s "$HOME/.ssh/id_ed25519" "$out/id_ed25519"
-      fi
+      cp $id_ed25519 $HOME/.ssh/id_ed25519
     '';
+
+    dontUnpack = true;
 }
