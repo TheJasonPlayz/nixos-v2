@@ -56,11 +56,11 @@ def __main__():
     if switch_bool != "n":
         match hostname:
             case "jasonw-pc":
-                rebuild_output = rebuild_func(argv)
+                rebuild_output = rebuild_func(argv[1:])
             case "jasonw-laptop":
-                rebuild_output = rebuild_func(argv)
+                rebuild_output = rebuild_func(argv[1:])
             case "jasonw-server1":
-                rebuild_output = rebuild_func(argv)
+                rebuild_output = rebuild_func(argv[1:])
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
