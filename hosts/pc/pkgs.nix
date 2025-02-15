@@ -1,11 +1,11 @@
 [
-    ../../pkgs/base.nix
-    ../../pkgs/cloud.nix
-    ../../pkgs/dev.nix
-    ../../pkgs/games.nix
-    ../../pkgs/internet.nix
-    ../../pkgs/office.nix
-    ../../pkgs/sage.nix
-    ../../pkgs/school.nix
-    ../../pkgs/utils.nix
+    ../common/pkgs/base.nix
+    ../common/pkgs/cloud.nix
+    ../common/pkgs/dev.nix
+    ../common/pkgs/games.nix
+    ../common/pkgs/internet.nix
+    ../common/pkgs/office.nix
+    ../common/pkgs/sage.nix
+    ../common/pkgs/school.nix
+    ../common/pkgs/utils.nix
 ]
