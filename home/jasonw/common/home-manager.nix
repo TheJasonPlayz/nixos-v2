@@ -1,4 +1,4 @@
-{ config, username, ... }:
+{ username, sops, ... }:
 
 {
   programs.home-manager.enable = true;
@@ -9,7 +9,7 @@
     file = {
       id_ed25519 = {
         force = true;
-        source = config.sops.secrets."ssh/priv_key".path;
+        source = sops.secrets."ssh/priv_key".path;
         target = ".ssh/id_ed25519";
       };
     };
