@@ -1,7 +1,7 @@
 { ... }:
 
 [
-    ../../pkgs/personal/ssh.nix
+    ../../pkgs/custom/ssh_privkey.nix
     ../../pkgs/base.nix
     ../../pkgs/cloud.nix
     ../../pkgs/dev.nix
