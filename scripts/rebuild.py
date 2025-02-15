@@ -39,6 +39,7 @@ def __main__():
     git_password = get_sops()["github"]["pac"]
     environ["GIT_USERNAME"] = "TheJasonPlayz"
     environ["GIT_PASSWORD"] = git_password
+    environ["GIT_ASKPASS"] = str(Path("./git_password.sh").absolute())
 
     print("=== GIT PRE ===", git_pre() + "\n", sep="\n")
 

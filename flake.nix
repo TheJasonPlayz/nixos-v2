@@ -57,7 +57,6 @@
     devShells.${system}.default = pkgs.mkShell {
         packages = with pkgs; [
           (python312.withPackages (python-pkgs: with python-pkgs; [
-            tqdm
             pyyaml
             requests
           ]))
