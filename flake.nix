@@ -28,8 +28,7 @@
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
     hm-config = host: user: { ... }: {
       home-manager = {
-        users.${user}.username = user;
-        users.${user} = import ./home/${user}/${host}.nix { inherit user; };
+        users.${user} = {inherit username; } // import ./home/${user}/${host}.nix { inherit user; };
         sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };
