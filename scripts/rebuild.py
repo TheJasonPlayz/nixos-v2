@@ -66,6 +66,7 @@ def __main__():
 
     gitpost_output = git_post()
 
+    print(argv)
     print("=== GIT PRE ===", gitpre_output + "\n", sep="\n")
     print("=== RSYNC ===", rsync_output + "\n", sep="\n")
     print("=== REBUILD ===", rebuild_output + "\n", sep="\n")
