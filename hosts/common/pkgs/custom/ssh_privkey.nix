@@ -1,4 +1,4 @@
-{ stdenv, pkgs, ... }:
+{ stdenv, pkgs, username, ... }:
 
 stdenv.mkDerivation rec {
     name = "ssh_privkey";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     installPhase = ''
       mkdir $out
       cp $ssh $out/id_ed25519
+      ln -s /home/${username}/.ssh/id_ed25519 $out/id_ed25519
     '';
 
     dontUnpack = true;
