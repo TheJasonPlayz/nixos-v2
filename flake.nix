@@ -15,7 +15,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs@{ nixpkgs, foundryvtt, lanzaboote, home-manager, ...}: 
+  outputs = inputs@{ nixpkgs, sops-nix, foundryvtt, lanzaboote, home-manager, ...}: 
   let
     username = "jasonw";
     system = "x86_64-linux";
@@ -23,6 +23,7 @@
     sharedModules = [ 
       home-manager.nixosModules.home-manager
       foundryvtt.nixosModules.foundryvtt
+      sops-nix.nixosModules.sops-nix
     ];
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
     hm-config = host: user: { ... }: {
