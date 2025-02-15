@@ -43,7 +43,7 @@
           ./config/hosts/laptop/boot.nix
           ./config/hosts/laptop/hardware.nix
           ./config/hosts/laptop/configuration.nix
-        ] ++ ./config/hosts/laptop/pkgs.nix;
+        ] ++ (import ./config/hosts/laptop/pkgs.nix);
       };
     };
     devShells.${system}.default = pkgs.mkShell {
