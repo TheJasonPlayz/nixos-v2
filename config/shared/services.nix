@@ -38,10 +38,10 @@ lib.mkMerge [
           enable = true;
           greeter.enable = true;
           greeters.slick.enable = true;
-          xkb = {
-            layout = "us,us,jp";
-            variant = ",intl,";
-          };
+        };
+        xkb = {
+          layout = "us,us,jp";
+          variant = ",intl,";
         };
       };
       xrdp = {
