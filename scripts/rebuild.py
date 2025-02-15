@@ -63,7 +63,6 @@ def __main__():
     run(split_args(f"git config credential.https://github.com.username {GIT_USERNAME}"))
     environ["GIT_PASSWORD"] = git_password
     environ["GIT_ASKPASS"] = str(Path("./scripts/git_password.sh").absolute())
-    print(environ["GIT_ASKPASS"])
 
     print("=== GIT POST ===", git_post() + "\n", sep="\n")
 
