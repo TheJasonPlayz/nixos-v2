@@ -1,4 +1,7 @@
-[
+{ ... }:
+
+{ 
+  imports = [
   ./nixos.nix 
   ./nixpkgs.nix
   ./i18n.nix
@@ -8,4 +11,5 @@
   ./services.nix
   ./time.nix
   ./programs.nix
-]
+  ]; 
+}
