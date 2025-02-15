@@ -9,10 +9,11 @@ def run_with_realtime(cmds: str, shell: bool):
         shell=shell
     )
     while True:
-        line = process.stdout.readline()
-        if not line and process.poll() is not None:
+        stdout_line = process.stdout.readline()
+        stderr_line = process.stderr.readline()
+        if not stderr_line or not stdout_line and process.poll() is not None:
             break
-        print(line.decode(), end='')
+        print(stdout_line, stderr_line, end='', sep="\n")
 
 def split_args(cmds: str) -> list[str]:
     return cmds.split(" ")

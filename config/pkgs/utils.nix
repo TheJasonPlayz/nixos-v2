@@ -1,14 +1,13 @@
 { pkgs, lib, hasGui ? false, ... }:
 
-{
-  environment.systemPackages = [ lib.mkMerge [
+
+lib.mkMerge [
     {
-      # environment.systemPackages = with pkgs; [];
+      environment.systemPackages = [];
     }
-    lib.mkIf hasGui {
-      environment.systemPackages = with pkgs; [
+    {
+      environment.systemPackages = lib.mkIf hasGui (with pkgs; [
         gparted
-      ];
+      ]);
     }
-  ] ];
-}
+]
