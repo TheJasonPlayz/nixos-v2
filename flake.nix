@@ -37,9 +37,9 @@
       specialArgs = { inherit foundryvtt hasGui hostname username; };
       modules = sharedModules ++ [
         ./hosts/common
-        (./hosts/${host})
+        ./hosts/${host}
         (hm-config host username)
-      ] (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
+      ] ++ (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
     };
   in
   {
