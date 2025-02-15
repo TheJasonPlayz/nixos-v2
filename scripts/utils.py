@@ -1,5 +1,4 @@
 from subprocess import CompletedProcess, PIPE, run
-from git import RemoteProgress
 from tqdm import tqdm
 from yaml import safe_load
 
@@ -18,12 +17,3 @@ def get_output(proc: CompletedProcess) -> str:
 def get_sops():
     sops_yaml = get_stdout(run(["sops", "-d", "./secrets.yaml"], stdout=PIPE))
     return safe_load(sops_yaml)
-
-class GitProgress(RemoteProgress):
-    def __init__(self):
-        super().__init__()
-        self.pbar = tqdm()
-    def update(self, op_code, cur_count, max_count=None, message = ''):
-        self.pbar.total = max_count
-        self.pbar.n = cur_count
-        self.pbar.refresh()

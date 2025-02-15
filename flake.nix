@@ -51,6 +51,7 @@
           (python312.withPackages (python-pkgs: with python-pkgs; [
             tqdm
             pyyaml
+            requests
           ]))
           nixd
           bashInteractive
@@ -58,6 +59,7 @@
           age
         ];
         shellHook = ''
+          ./scripts/rebuild.py
           codium .
         '';
     };
