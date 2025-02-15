@@ -4,7 +4,6 @@
   services.usbmuxd.enable = true;
 
   programs = {
-    firefox.enable = true;
     steam.enable = true;
     droidcam.enable = true;
     chromium.enable = true;

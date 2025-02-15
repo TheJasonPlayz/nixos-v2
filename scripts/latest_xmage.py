@@ -4,7 +4,7 @@ from subprocess import run, PIPE, DEVNULL
 import re
 
 URL = "https://api.github.com/repos/magefree/mage/releases/latest"
-OVERLAY = "./config/overlays/xmage.nix"
+OVERLAY = "./overlays/xmage.nix"
 RE_FUNC = lambda spaces, string: rf'(\s{{{str(spaces)}}}{string}\s=\s")(.*)(")'
 VER_RE=re.compile(RE_FUNC(2, "version"))
 URL_RE=re.compile(RE_FUNC(2, "url"))

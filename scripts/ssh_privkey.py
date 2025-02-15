@@ -4,7 +4,7 @@ from utils import *
 from pathlib import Path
 from re import sub, compile, M
 
-OVERLAY = Path("./config/pkgs/custom/ssh_privkey.nix")
+OVERLAY = Path("./hosts/common/pkgs/custom/ssh_privkey.nix")
 PATTERN = compile(r'(\s{2}private_key\s=\spkgs\.writeText\s\"id_ed25519\"\s\'\')(.*)(\'\')')
 priv_key = get_sops()["ssh"]["priv_key"]
 

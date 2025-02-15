@@ -4,71 +4,75 @@
     foundryvtt.url = "github:reckenrode/nix-foundryvtt";
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
-
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs@{ nixpkgs, foundryvtt, lanzaboote, ...}: 
-  let 
+  outputs = inputs@{ nixpkgs, foundryvtt, lanzaboote, home-manager, ...}: 
+  let
     username = "jasonw";
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
-    nixosSystem = nixpkgs.lib.nixosSystem;
     sharedModules = [ 
+      home-manager.nixosModules.home-manager
       foundryvtt.nixosModules.foundryvtt
-      ./config/shared/nixos.nix 
-      ./config/shared/nixpkgs.nix
-      ./config/shared/i18n.nix
-      ./config/shared/security.nix
-      ./config/shared/networking.nix
-      ./config/shared/users.nix
-      ./config/shared/services.nix
-      ./config/shared/time.nix
+      ./hosts/common/nixos.nix 
+      ./hosts/common/nixpkgs.nix
+      ./hosts/common/i18n.nix
+      ./hosts/common/security.nix
+      ./hosts/common/networking.nix
+      ./hosts/common/users.nix
+      ./hosts/common/services.nix
+      ./hosts/common/time.nix
+      ./hosts/common/programs.nix
     ];
-  in 
+    host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
+    hm-config = host: user: { ... }: {
+      home-manager = {
+        users.${user} = import ./home/${user}/${host}.nix;
+        extraSpecialArgs = {};
+      };
+    };
+    mkNixos = hostname: hasGui: 
+    let
+      inherit (pkgs.lib) mkIf nixosSystem;
+      host = host_func hostname 6;
+    in
+    nixosSystem {
+      specialArgs = { inherit foundryvtt hasGui hostname username; };
+      modules = sharedModules ++ [
+        (mkIf (hostname == "jasonw-pc") lanzaboote.nixosModules.lanzaboote)
+        ./hosts/${host}/boot.nix
+        ./hosts/${host}/hardware.nix
+        ./hosts/${host}/configuration.nix
+        (hm-config host username)
+      ] ++ ( import ./hosts/${host}/pkgs.nix);
+    };
+  in
   {
     nixosConfigurations = {
-      jasonw-pc = let
-        hostname = "jasonw-pc";
-        hasGui = true;
-      in
-      nixosSystem {
-        specialArgs = { inherit foundryvtt hasGui hostname username; };        
-        modules = sharedModules ++ [
-          lanzaboote.nixosModules.lanzaboote
-          ./config/hosts/pc/boot.nix
-          ./config/hosts/pc/hardware.nix
-          ./config/hosts/pc/configuration.nix
-        ] ++ (import ./config/hosts/pc/pkgs.nix);
-      };
-      jasonw-laptop = let
-        hostname = "jasonw-laptop";
-        hasGui = true;
-      in
-      nixosSystem {
-        specialArgs = { inherit foundryvtt hasGui hostname; };
-        modules = sharedModules ++ [
-          ./config/hosts/laptop/boot.nix
-          ./config/hosts/laptop/hardware.nix
-          ./config/hosts/laptop/configuration.nix
-        ] ++ (import ./config/hosts/laptop/pkgs.nix);
-      };
+      jasonw-pc = mkNixos "jasonw-pc" true;
+      jasonw-laptop = mkNixos "jasonw-laptop" true;
     };
     devShells.${system}.default = pkgs.mkShell {
-        packages = with pkgs; [
-          (python312.withPackages (python-pkgs: with python-pkgs; [
-            pyyaml
-            requests
-          ]))
-          nixd
-          bashInteractive
-          sops
-          age
-        ];
-        shellHook = ''
-          alias rebuild="./scripts/rebuild.py; sudo nixos-rebuild switch --flake /etc/nixos"
-          codium .
-        '';
+      packages = with pkgs; [
+        (python312.withPackages (python-pkgs: with python-pkgs; [
+          pyyaml
+          requests
+        ]))
+        nixd
+        bashInteractive
+        sops
+        age
+      ];
+      shellHook = ''
+        alias rebuild="./scripts/rebuild.py; sudo nixos-rebuild switch --flake /etc/nixos"
+        codium .
+      '';
     };
+    formatter = pkgs.nixfmt-rfc-style;
   };
 }
