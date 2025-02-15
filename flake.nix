@@ -66,6 +66,7 @@
           age
         ];
         shellHook = ''
+          alias rebuild="./scripts/rebuild.py; sudo nixos-rebuild switch --flake /etc/nixos\"
           codium .
         '';
     };
