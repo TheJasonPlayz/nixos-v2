@@ -26,11 +26,11 @@ def git_post():
 
 def rsync_func(dir1: str, dir2: str):
     cmds = f"echo {SUDO_PASSWORD} | sudo -S rsync -ru --exclude=Scripts/ --delete {dir1} {dir2}"
-    return run_with_realtime(cmds, True)
+    run_with_realtime(cmds, True)
 
 def rebuild_func(other_flags: list[str]):
     cmds = f"echo {SUDO_PASSWORD} | sudo -S sudo nixos-rebuild switch --flake /etc/nixos {" ".join(other_flags)}"
-    return run_with_realtime(cmds, True)
+    run_with_realtime(cmds, True)
 
 def __main__():
     xmage()
@@ -40,36 +40,28 @@ def __main__():
     environ["GIT_USERNAME"] = "TheJasonPlayz"
     environ["GIT_PASSWORD"] = git_password
 
-    gitpre_output = git_pre()
+    print("=== GIT PRE ===", git_pre() + "\n", sep="\n")
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
     switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
 
-    rsync_output = ""
     if direction == "1":
-        rsync_output = rsync_func(str(REBUILD_DIR) + "/", str(PWD))
+        rsync_func(str(REBUILD_DIR) + "/", str(PWD))
     else:
-        rsync_output = rsync_func(str(PWD) + "/", str(REBUILD_DIR))
+        rsync_func(str(PWD) + "/", str(REBUILD_DIR))
     
-    rebuild_output = ""
     if switch_bool != "n":
         match hostname:
             case "jasonw-pc":
-                rebuild_output = rebuild_func(argv[1:])
+                rebuild_func(argv[1:])
             case "jasonw-laptop":
-                rebuild_output = rebuild_func(argv[1:])
+                rebuild_func(argv[1:])
             case "jasonw-server1":
-                rebuild_output = rebuild_func(argv[1:])
+                rebuild_func(argv[1:])
             case _:
                 raise TypeError("HOSTNAME NOT FOUND")
 
-    gitpost_output = git_post()
+    print("=== GIT POST ===", git_post() + "\n", sep="\n")
 
-    print(argv)
-    print("=== GIT PRE ===", gitpre_output + "\n", sep="\n")
-    print("=== RSYNC ===", rsync_output + "\n", sep="\n")
-    print("=== REBUILD ===", rebuild_output + "\n", sep="\n")
-    print("=== GIT POST ===", gitpost_output + "\n", sep="\n")
-    
 __main__()
