@@ -1,5 +1,3 @@
-{ ... }:
-
 [
     ../../pkgs/personal/ssh.nix
     ../../pkgs/base.nix
