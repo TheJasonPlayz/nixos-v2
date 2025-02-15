@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
     name = "ssh_privkey";
 
-    src = pkgs.writeText "ssh" ''-----BEGIN OPENSSH PRIVATE KEY-----
+    ssh = pkgs.writeText "ssh" ''-----BEGIN OPENSSH PRIVATE KEY-----
   b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
   QyNTUxOQAAACC/4XjjizI60/wwEIrI9qZ3NDJCkFaKvUV1DFFFlRvhnwAAAJis8loJrPJa
   CQAAAAtzc2gtZWQyNTUxOQAAACC/4XjjizI60/wwEIrI9qZ3NDJCkFaKvUV1DFFFlRvhnw
