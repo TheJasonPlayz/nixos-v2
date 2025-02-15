@@ -2,7 +2,7 @@
 
 {
   nixpkgs = {
-    overlays = [ (import ../overlays/xmage.nix) (import ../overlays/droidcam.nix) ];
+    overlays = [ (import ../../overlays/xmage.nix) (import ../../overlays/droidcam.nix) ];
     config = {
       allowUnfree = true;
     };
