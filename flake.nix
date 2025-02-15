@@ -26,7 +26,7 @@
       sops-nix.nixosModules.sops
     ];
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
-    hm-config = host: user: sops-nix: { ... }: {
+    hm-config = host: user: { ... }: {
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { inherit sops-nix; };
         extraSpecialArgs = { };
@@ -43,7 +43,7 @@
       modules = sharedModules ++ [
         ./hosts/common
         ./hosts/${host}
-        (hm-config host username sops-nix)
+        (hm-config host username)
       ] ++ (if (hostname == "jasonw-pc") then [lanzaboote.nixosModules.lanzaboote] else []);
     };
   in
