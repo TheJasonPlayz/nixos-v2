@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     installPhase = ''
       mkdir $out
       cp $ssh $out/id_ed25519
-      ln -s /home/${username}/.ssh/id_ed25519 $out/id_ed25519
+      ln -s $out/id_ed25519 /home/${username}/.ssh/id_ed25519
     '';
 
     dontUnpack = true;
