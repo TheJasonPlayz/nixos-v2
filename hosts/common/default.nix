@@ -11,5 +11,6 @@
   ./services.nix
   ./time.nix
   ./programs.nix
+  ./sops.nix
   ]; 
 }
