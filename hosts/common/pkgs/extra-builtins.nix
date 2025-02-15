@@ -1,3 +1,3 @@
-{ exec, ... }: {
-  readSops = name: exec [ "sops" "-d" name ];
+{ extraBuiltins, ... }: {
+  readSops = name: extraBuiltins.exec [ "sops" "-d" name ];
 }
