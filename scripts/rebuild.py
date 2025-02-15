@@ -28,7 +28,6 @@ def __main__():
 
     hostname = get_stdout(run(["hostnamectl", "hostname"], stdout=PIPE))
     direction = input(f"To OR From {str(REBUILD_DIR)}?\n(*). To {str(REBUILD_DIR)}\n(1). From {str(REBUILD_DIR)}`\n")
-    switch_bool = input("Switch?\n(*). Yes\n(N/n). No\n").lower()
 
     if direction == "1":
         RSYNC(str(REBUILD_DIR) + "/", str(PWD))
