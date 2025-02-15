@@ -8,7 +8,7 @@ from utils import *
 from ssh_privkey import __main__ as privkey
 from latest_xmage import __main__ as xmage
 
-REBUILD_DIR=Path('/etc/nixos/')
+REBUILD_DIR=Path('/etc/nixos')
 PWD=Path.cwd()
 SCRIPT_DIR=PWD/'scripts'
 AUTOCOMMIT_MESSAGE="\'Auto-commit update\'"
@@ -48,9 +48,9 @@ def __main__():
 
     rsync_output = ""
     if direction == "1":
-        rsync_output = rsync_func(str(REBUILD_DIR), str(PWD))
+        rsync_output = rsync_func(str(REBUILD_DIR) + "/", str(PWD))
     else:
-        rsync_output = rsync_func(str(PWD), str(REBUILD_DIR))
+        rsync_output = rsync_func(str(PWD) + "/", str(REBUILD_DIR))
     
     rebuild_output = ""
     if switch_bool != "n":
