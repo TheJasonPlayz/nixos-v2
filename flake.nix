@@ -44,7 +44,7 @@
     in
     nixosSystem {
       specialArgs = { inherit foundryvtt hasGui hostname username; };
-      modules = sharedModules ++ mkIf (hostname == "jasonw-pc") [lanzaboote.nixosModules.lanzaboote] ++ [
+      modules = sharedModules ++ [mkIf (hostname == "jasonw-pc") lanzaboote.nixosModules.lanzaboote] ++ [
         ./hosts/${host}/boot.nix
         ./hosts/${host}/hardware.nix
         ./hosts/${host}/configuration.nix
