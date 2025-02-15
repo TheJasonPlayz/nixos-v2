@@ -1,8 +1,6 @@
 { pkgs, config, lib, username, foundryvtt, hasGui ? false, hostname, ... }:
-
-{
-  services = lib.mkMerge [
-    {
+lib.mkMerge [
+    {services = {
       /* AUDIO */
       pipewire = {
         enable = true;
@@ -26,9 +24,9 @@
         package = foundryvtt.packages.${pkgs.system}.foundryvtt_12;
       };
       blueman.enable = true;
-    }
+    };}
 
-    lib.mkIf hasGui {
+    {services = lib.mkIf hasGui {
       desktopManager.plasma6 = {
         enable = true;
         enableQt5Integration = true;
@@ -51,6 +49,5 @@
         openFirewall = true;
         defaultWindowManager =  "startplasma-x11";
       };
-    } 
-  ];
-}
+    };}
+]
