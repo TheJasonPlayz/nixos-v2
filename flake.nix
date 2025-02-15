@@ -40,7 +40,7 @@
     let
       inherit (pkgs.lib) mkIf;
       inherit (nixpkgs.lib) nixosSystem;
-      host = host_func hostname 6;
+      host = host_func hostname 7;
     in
     nixosSystem {
       specialArgs = { inherit foundryvtt hasGui hostname username; };
