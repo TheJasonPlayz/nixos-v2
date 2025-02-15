@@ -1,7 +1,7 @@
-{ username, sops, ... }:
+{ username, readSops, ... }:
 
 let
-  secrets = builtins.extraBuiltins.readSops ../secrets/eval-secrets.nix;
+  secrets = readSops ../../../secrets.yaml;
 in
 {
   programs.home-manager.enable = true;
@@ -12,7 +12,7 @@ in
     file = {
       id_ed25519 = {
         force = true;
-        text = secrets.ssh.priv_key;
+        text =  secrets.ssh.priv_key;
         target = ".ssh/id_ed25519";
       };
     };

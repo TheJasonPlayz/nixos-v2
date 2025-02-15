@@ -29,11 +29,11 @@
     hm-config = host: user: { config, ... }: 
     let 
       sops = config.sops;
-      extraBuiltins = builtins.extraBuiltins;
+      readSops = builtins.extraBuiltins.readSops;
     in {
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { username=user; };
-        extraSpecialArgs = { username=user; inherit sops extraBuiltins; };
+        extraSpecialArgs = { username=user; inherit sops readSops; };
         sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };
