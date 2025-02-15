@@ -2,8 +2,13 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     foundryvtt.url = "github:reckenrode/nix-foundryvtt";
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = inputs@{ nixpkgs, foundryvtt, ...}: 
+  outputs = inputs@{ nixpkgs, foundryvtt, lanzaboote, ...}: 
   let 
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
@@ -28,6 +33,7 @@
       nixosSystem {
         specialArgs = { inherit foundryvtt hasGui hostname; };        
         modules = sharedModules ++ [
+          lanzaboote.nixosModules.lanzaboote
           ./config/hosts/pc/boot.nix
           ./config/hosts/pc/hardware.nix
           ./config/hosts/pc/configuration.nix
