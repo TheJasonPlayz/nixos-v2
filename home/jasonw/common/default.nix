@@ -1,7 +1,7 @@
-{ ... }:
+{ username, ... }:
 
 {
   imports = [
-    ./home-manager.nix
+    ./home-manager.nix { inherit username; }
   ];
 }

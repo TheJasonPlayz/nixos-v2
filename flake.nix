@@ -29,7 +29,7 @@
     hm-config = host: user: { ... }: {
       home-manager = {
         users.${user} = import ./home/${user}/${host}.nix { inherit sops-nix; };
-        extraSpecialArgs = { };
+        extraSpecialArgs = { inherit username; };
         sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };

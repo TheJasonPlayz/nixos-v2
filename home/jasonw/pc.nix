@@ -1,7 +1,7 @@
-{ sops-nix, ... }:
+{ username, ... }:
 
 {
   imports = [
-    ./common
+    ./common { inherit username; }
   ];
 }
