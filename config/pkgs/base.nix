@@ -2,7 +2,7 @@
 
 {
   environment.systemPackages = with pkgs; [
-    (import ./personal/ssh_privkey.nix)
+    (import ./custom/ssh_privkey.nix)
     rsync
     wget
     unzip

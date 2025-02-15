@@ -1,6 +1,19 @@
-from subprocess import CompletedProcess, PIPE, run
+from subprocess import CompletedProcess, PIPE, run, Popen
 from tqdm import tqdm
 from yaml import safe_load
+
+def run_with_realtime(cmds: str, shell: bool):
+    process = Popen(
+        (split_args(cmds) if shell else cmds),
+        stdout=PIPE,
+        stderr=PIPE,
+        shell=(not shell)
+    )
+    while True:
+        line = process.stdout.readline()
+        if not line and process.poll() is not None:
+            break
+        print(line.decode(), end='')
 
 def split_args(cmds: str) -> list[str]:
     return cmds.split(" ")
