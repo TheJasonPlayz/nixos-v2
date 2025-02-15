@@ -4,7 +4,7 @@
   hardware = {
     /* Display */
     amdgpu = {
-      opencl.eanble = true;
+      opencl.enable = true;
       amdvlk.enable = true;
       initrd.enable = true;
     };
