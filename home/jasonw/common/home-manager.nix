@@ -2,7 +2,6 @@
 
 {
   programs.home-manager.enable = true;
-  home-manager.users.${username}.username = username;
   home = {
     username = username;
     homeDirectory = "/home/${username}";

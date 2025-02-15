@@ -1,7 +1,7 @@
-{ username, ... }:
+{ ... }:
 
 {
   imports = [
-    ./common { inherit username; }
+    ./common
   ];
 }
