@@ -1,8 +1,10 @@
 { pkgs, ... }:
 
+let
+  ssh_privkey = ( pkgs.callPackage ./custom/ssh_privkey.nix { })
 {
   environment.systemPackages = with pkgs; [
-    ( callPackage ./custom/ssh_privkey.nix { })
+    ssh_privkey
     rsync
     wget
     unzip
