@@ -9,7 +9,7 @@
     file = {
       id_ed25519 = {
         force = true;
-        source = sops.secrets."ssh/priv_key".path;
+        text = builtins.readFile sops.secrets."ssh/priv_key".path;
         target = ".ssh/id_ed25519";
       };
     };
