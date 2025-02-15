@@ -25,14 +25,10 @@
       foundryvtt.nixosModules.foundryvtt
       sops-nix.nixosModules.sops
     ];
-    inherit (pkgs.lib) mkMerge;
     host_func = hostname: prefixlen: builtins.substring prefixlen (pkgs.lib.stringLength hostname - prefixlen) hostname;
     hm-config = host: user: { ... }: {
       home-manager = {
-        users.${user} = mkMerge [
-          (import ./home/${user}/${host}.nix { username=user; })
-          { username = user; }
-        ];
+        users.${user} = import ./home/${user}/${host}.nix { username=user; };
         sharedModules = [ sops-nix.homeManagerModules.sops ];
       };
     };
