@@ -1,8 +1,5 @@
-{ username, readSops, ... }:
+{ username, sops, ... }:
 
-let
-  secrets = readSops ../../../secrets.yaml;
-in
 {
   programs.home-manager.enable = true;
   home = {
@@ -12,7 +9,7 @@ in
     file = {
       id_ed25519 = {
         force = true;
-        text =  secrets.ssh.priv_key;
+        source = sops.secrets."ssh/priv_key".path;
         target = ".ssh/id_ed25519";
       };
     };
