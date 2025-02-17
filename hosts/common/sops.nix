@@ -10,7 +10,6 @@
     secrets = {
       "github/pac" = {};
       "ssh/priv_key" = {
-        neededForUsers = true;
       };
     };
   };
