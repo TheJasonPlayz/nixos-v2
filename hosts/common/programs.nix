@@ -11,6 +11,7 @@ lib.mkMerge [
   {
     programs = lib.mkIf hasGui {
       firefox.enable = true;
+      steam.enable = true;
     };
   }
 ]
