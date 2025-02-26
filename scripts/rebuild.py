@@ -39,6 +39,3 @@ def __main__():
 
     print("=== GIT POST ===\n")
     run_with_realtime(GIT_POST)
-    print("\n")
-
-__main__()
